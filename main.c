@@ -26,6 +26,7 @@ Expected output:
 #include <stdlib.h>
 #include <string.h>
 #include "smp0_tests.h"
+#define LENGTH(s) (sizeof(s) / sizeof(*s))
 
 /* Structures */
 typedef struct {
@@ -71,7 +72,9 @@ void print_result(WordCountEntry entries[], int entry_count, FILE *Newfile)
 {
 	int a = 0;
 	fprintf(Newfile,"Result:\n");
-	for (int a = 0; a < entry_count; a++) { fprintf(Newfile, "%s:%d\n", entries[a].word, entries[a].counter); }
+	for (int a = 0; a < entry_count; a++) { 
+		fprintf(Newfile, "%s:%d\n", entries[a].word, entries[a].counter); 
+	}
 }
 
 void printHelp(const char *name)
@@ -98,7 +101,7 @@ int main(int argc, char** argv)
 	while (*argv != NULL) {
 
 		if (**argv == '-') {
-			switch (*argv[1]) {
+			switch ((*argv)[1]) {
 			case 'h':
 				printHelp(prog_name);
 				break;
