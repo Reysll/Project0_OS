@@ -38,7 +38,7 @@ int process_stream(WordCountEntry entries[], int entry_count)
 {
 	short line_count = 0;
 	char buffer[30];
-	char* resv = " \v\f\t\r\n";
+	char* resv = " \t\r\n\v\f";
 	while (fgets(buffer, sizeof(buffer), stdin)) {
 		if (*buffer == '.')
 			break;
@@ -49,8 +49,8 @@ int process_stream(WordCountEntry entries[], int entry_count)
 			buffer[--len] = 0; /* overwrite with nul-byte */
 
 		char* temptoken;
-		temptoken = strtok(buffer, resv);
-		while (temptoken != NULL)
+		temptoken = strtok(buffer,resv);
+		while (temptoken !=NULL)
 		{	
 			int acount = 0;
 		
@@ -61,7 +61,7 @@ int process_stream(WordCountEntry entries[], int entry_count)
 					entries[acount].counter++;
 				acount++;
 			}
-			temptoken = strtok(NULL, resv);
+			temptoken = strtok(NULL,resv);
 		}
 	line_count++;
 }
@@ -82,7 +82,7 @@ void printHelp(const char *name)
 	fprintf(stderr, "usage: %s [-h] [-f FILENAME] <word1> ... <wordN>\n", name);
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	const char *prog_name = *argv;
 	/*Add support for matching arbitrary number of words, not just 5.*/
@@ -95,11 +95,10 @@ int main(int argc, char** argv)
 		return EXIT_SUCCESS;
 	}
 
-	entries = (WordCountEntry*)malloc(argc * sizeof(WordCountEntry));
+	entries = (WordCountEntry*) malloc (argc * sizeof(WordCountEntry));
 	argv++;
-	char* tem = malloc(sizeof(char) * 30);
+	char *tem = malloc(sizeof(char)* 30);
 	while (*argv != NULL) {
-
 		if (**argv == '-') {
 			switch ((*argv)[1]) {
 			case 'h':
@@ -114,7 +113,7 @@ int main(int argc, char** argv)
 			}
 		}
 		else {
-			if (entryCount < argc - 1){
+			if (entryCount < argc-1) {
 			entries[entryCount].word = (*argv);
 			entries[entryCount++].counter = 0;}
 	}
@@ -127,10 +126,10 @@ int main(int argc, char** argv)
 	}
 
 	if (entryCount == 1) {
-		fprintf(stdout, "Looking for a single word\n");
+		fprintf(Newfile, "Looking for a single word\n");
 	}
 	else {
-		fprintf(stdout, "Looking for %d words\n", entryCount);
+		fprintf(Newfile, "Looking for %d words\n", entryCount);
 	}
 	process_stream(entries, entryCount);
 	print_result(entries, entryCount,Newfile);
