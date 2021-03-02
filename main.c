@@ -50,9 +50,10 @@ int process_stream(WordCountEntry entries[], int entry_count)
 		char* temptoken;
 		temptoken = strtok(buffer, resv);
 		while (temptoken != NULL)
+		{	
 			int acount = 0;
-		while (temptoken != NULL)
-		{
+		
+		while (a<entry_count)
 			{
 				/* Compare against each entry */
 				if (!strcmp(entries[acount].word, temptoken))
@@ -86,9 +87,9 @@ int main(int argc, char** argv)
 {
 	const char* prog_name = *argv;
 	/*Add support for matching arbitrary number of words, not just 5.*/
-	WordCountEntry* entries;
+	WordCountEntry *entries;
 	int entryCount = 0;
-	FILE* Newfile = stdout;
+	FILE *Newfile = stdout;
 
 	if (argc > 1 && !strcmp(argv[1], "-test")) {
 		run_smp0_tests(argc - 1, argv + 1);
@@ -98,7 +99,7 @@ int main(int argc, char** argv)
 	entries = (WordCountEntry*)malloc(argc * sizeof(WordCountEntry));
 	argv++;
 	char* tem = malloc(sizeof(char) * 30);
-	while (*argv[1] = NULL) {
+	while (*argv != NULL) {
 
 		if (**argv == '-') {
 			switch (*argv[1]) {
