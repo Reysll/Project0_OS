@@ -76,10 +76,10 @@ int entryCount = 0;
 
 for (int i = 1; i < argc; i++) {
 if (*argv[i] == '-') {
-switch (argv[i][1]) {
+
+switch (argv[1][1]) {
 case 'h':
-printHelp (prog_name);
-break;
+		printHelp(prog_name);
 case 'f':
 freopen((*argv)[2],"w",stdout);
 break;
@@ -88,8 +88,12 @@ fprintf (stderr, "%s: Invalid option %s. Use -h for help.\n",prog_name, *argv);
 }
 }
 else {
-entries[entryCount].word = argv[i];
-entries[entryCount++].counter = 0;
+	if (entryCount < LENGTH(entries) - 1) {
+		entries[entryCount].word = *argv + entryCount + 1;
+		entries[entryCount++].counter = 0;
+	}
+}
+argv++;
 }
 }
 
@@ -141,12 +145,12 @@ int process_stream(WordCountEntry entries[], int entry_count)
 	return line_count;
 }
 
-void print_result(WordCountEntry entries[], int entry_count)
-{
-	fprintf(stdout, "\nResult:\n");
-
-	for (int i = 0; i < entry_count; i++) {
-		printf("%s:%d\n", entries[i].word, entries[i].counter);
+void print_result(WordCountEntry entries[], int entry_count) {
+	printf("Result:\n");
+	while (entry_count > 0) {
+		printf("%s:%d\n", entries->word, entries->counter);
+		entry_count++;
+		entries++;
 	}
 }
 
