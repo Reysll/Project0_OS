@@ -67,10 +67,6 @@ int process_stream(WordCountEntry entries[], int entry_count)
 	return line_count;
 }
 
-//
-//
-//
-
 void print_result(WordCountEntry entries[], int entry_count, FILE *Newfile) 
 {
 	int a = 0;
@@ -85,7 +81,7 @@ void printHelp(const char *name)
 
 int main(int argc, char** argv)
 {
-	const char* prog_name = *argv;
+	const char *prog_name = *argv;
 	/*Add support for matching arbitrary number of words, not just 5.*/
 	WordCountEntry *entries;
 	int entryCount = 0;
@@ -137,5 +133,4 @@ int main(int argc, char** argv)
 	print_result(entries, entryCount,Newfile);
 	fclose(Newfile);
 	return EXIT_SUCCESS;
-	fflush(stdout);
 }
