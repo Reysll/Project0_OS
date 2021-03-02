@@ -53,7 +53,7 @@ int process_stream(WordCountEntry entries[], int entry_count)
 		{	
 			int acount = 0;
 		
-		while (a<entry_count)
+		while (acount<entry_count)
 			{
 				/* Compare against each entry */
 				if (!strcmp(entries[acount].word, temptoken))
@@ -75,7 +75,7 @@ void print_result(WordCountEntry entries[], int entry_count, FILE *Newfile)
 {
 	int a = 0;
 	fprintf(Newfile,"Result:\n");
-	for (a < entry_count, a++) {fprintf(Newfile, "%s:%d\n", entries[a].word, entries[a].counter);}
+	for (a < entry_count, a++;) { fprintf(Newfile, "%s:%d\n", entries[a].word, entries[a].counter); }
 }
 
 void printHelp(const char *name)
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
 		fprintf(stdout, "Looking for %d words\n", entryCount);
 	}
 	process_stream(entries, entryCount);
-	print_result(entries, entryCount);
+	print_result(entries, entryCount,Newfile);
 	fclose(Newfile);
 	return EXIT_SUCCESS;
 	fflush(stdout);
