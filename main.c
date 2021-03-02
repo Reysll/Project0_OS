@@ -128,7 +128,7 @@ int process_stream(WordCountEntry entries[], int entry_count)
 {
 	short line_count = 0;
 	char buffer[30];
-	char *resv= " \v\f\t\r\n";
+	char* resv = " \v\f\t\r\n";
 	while (fgets(buffer, sizeof(buffer), stdin)) {
 		if (*buffer == '.')
 			break;
@@ -142,30 +142,33 @@ int process_stream(WordCountEntry entries[], int entry_count)
 		temptoken = strtok(buffer, resv);
 		while (temptoken != NULL)
 			int acount = 0;
-		while (a < entry_count)
+		while (temptoken != NULL)
 		{
-			/* Compare against each entry */
-			if (!strcmp(entries[acount].word, temptoken))
-				entries[acount].counter++;
-			acount++;
+			{
+				/* Compare against each entry */
+				if (!strcmp(entries[acount].word, temptoken))
+					entries[acount].counter++;
+				acount++;
+			}
+			temptoken = strtok(NULL, resv);
 		}
-		temptoken = strtok(NULL, resv);
-	}
 	line_count++;
-	}
+}
 	return line_count;
 }
 
-void print_result(WordCountEntry entries[], int entry_count) {
-	fprintf("Result:\n");
-	while (entry_count > 0) {
-		fprintf("%s:%d\n", entries->word, entries->counter);
-		entry_count++;
-		entries++;
-	}
+//
+//
+//
+
+void print_result(WordCountEntry entries[], int entry_count, FILE *Newfile) 
+{
+	int a = 0;
+	fprintf(Newfile,"Result:\n");
+	for (a < entry_count, a++) {fprintf(Newfile, "%s:%d\n", entries[a].word, entries[a].counter);}
 }
 
-void printHelp(const char* name)
+void printHelp(const char *name)
 {
 	fprintf(stderr, "usage: %s [-h] [-f FILENAME] <word1> ... <wordN>\n", name);
 }
@@ -174,27 +177,40 @@ int main(int argc, char** argv)
 {
 	const char* prog_name = *argv;
 	/*Add support for matching arbitrary number of words, not just 5.*/
-	WordCountEntry entries[argc];
+	WordCountEntry* entries;
 	int entryCount = 0;
+	FILE* Newfile = stdout;
 
-	for (int i = 1; i < argc; i++) {
-		if (*argv[i] == '-') {
-			switch (argv[i][1]) {
+	//if (argc > 1 && !strcmp(argv[1], "-test")) {
+	//	run_smp0_tests(argc - 1, argv + 1);
+	//	return EXIT_SUCCESS;
+	//}
+
+	entries = (WordCountEntry*)malloc(argc * sizeof(WordCountEntry));
+	argv++;
+	char* tem = malloc(sizeof(char) * 30);
+	while (*argv[1] = NULL) {
+
+		if (**argv == '-') {
+			switch (*argv[1]) {
 			case 'h':
 				printHelp(prog_name);
 				break;
 			case 'f':
-				freopen((*argv)[2], "w", stdout);
+				strncpy(tem, *argv + 2, 20);
+				Newfile = fopen(tem, "w");
 				break;
 			default:
 				fprintf(stderr, "%s: Invalid option %s. Use -h for help.\n", prog_name, *argv);
 			}
 		}
 		else {
-			entries[entryCount].word = argv[i];
-			entries[entryCount++].counter = 0;
-		}
+			if (entryCount < argc - 1){
+			entries[entryCount].word = (*argv);
+			entries[entryCount++].counter = 0;}
 	}
+	   argv++;
+}
 
 	if (!entryCount) {
 		fprintf(stderr, "%s: Please supply at least one word. Use -h for help.\n", prog_name);
@@ -209,7 +225,7 @@ int main(int argc, char** argv)
 	}
 	process_stream(entries, entryCount);
 	print_result(entries, entryCount);
-
+	fclose(Newfile);
 	return EXIT_SUCCESS;
 	fflush(stdout);
 }
