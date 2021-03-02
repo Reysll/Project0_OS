@@ -24,6 +24,7 @@ Expected output:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "smp0_tests.h"
 
 /* Structures */
 typedef struct {
@@ -58,7 +59,7 @@ void print_result (WordCountEntry entries[], int entry_count)
 fprintf (stdout, "\nResult:\n");
 
 for (int i = 0; i < entry_count; i++) {
-printf ("%s:%d\n", entries[i].word, entries[i].counter);
+fprintf ("%s:%d\n", entries[i].word, entries[i].counter);
 }
 }
 
@@ -127,6 +128,7 @@ int process_stream(WordCountEntry entries[], int entry_count)
 {
 	short line_count = 0;
 	char buffer[30];
+	char *resv= " \v\f\t\r\n";
 	while (fgets(buffer, sizeof(buffer), stdin)) {
 		if (*buffer == '.')
 			break;
@@ -136,19 +138,28 @@ int process_stream(WordCountEntry entries[], int entry_count)
 		if (buffer[len - 1] == '\n') /* check for '\n' */
 			buffer[--len] = 0; /* overwrite with nul-byte */
 
+		char* temptoken;
+		temptoken = strtok(buffer, resv);
+		while (temptoken != NULL)
+			int acount = 0;
+		while (a < entry_count)
+		{
 			/* Compare against each entry */
-		if (!strcmp(entries[line_count].word, buffer))
-			entries[line_count].counter++;
-		if (++line_count == entry_count)
-			break;
+			if (!strcmp(entries[acount].word, temptoken))
+				entries[acount].counter++;
+			acount++;
+		}
+		temptoken = strtok(NULL, resv);
+	}
+	line_count++;
 	}
 	return line_count;
 }
 
 void print_result(WordCountEntry entries[], int entry_count) {
-	printf("Result:\n");
+	fprintf("Result:\n");
 	while (entry_count > 0) {
-		printf("%s:%d\n", entries->word, entries->counter);
+		fprintf("%s:%d\n", entries->word, entries->counter);
 		entry_count++;
 		entries++;
 	}
