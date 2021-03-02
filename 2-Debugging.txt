@@ -1,0 +1,55 @@
+Part Two: Fixing the Bugs
+-------------------------
+
+Understanding the code
+
+  1) Explain why this program uses the exclamation operator with the
+     strcmp() function.
+
+Negates strcmp to help execute loops when strings are equal.
+
+  2) Explain why the 'LENGTH' macro returns the length of an array.
+     Would it work with a pointer to a dynamically allocated array? (Hint:
+     understand sizeof).
+
+LENGHT returns lenght of array. if a pointer is used it would return 
+the  size of the array at the first element. sizeof does not return 
+size of an dynamically allocated buffer, it only works for static.
+
+Bug hunting
+
+  3) Explain and fix the logical flow bug within the switch statement.
+     (What happens when the -h option is used?)
+
+switch (( * argv)[1]) 
+	{ 
+        case 'h':
+        	printHelp(prog_name);
+        default:
+                printf("%s: Invalid option %s. Use -h for help.\n",prog_name, * argv);
+        }
+argv changed to scan 1st char. if -h is passed PrintHelp is called
+
+  4) Explain and fix the argument parsing error. (Why is entrycount never
+     zero?)
+  else {
+  if (entryCount < LENGTH(entries)-1) {
+  entries[entryCount].word = * argv+entryCount+1;
+  entries[entryCount++].counter = 0;
+            }}
+        argv++;}
+
+FIRST ARG = file_name. pamar -1 due to that change.
+file name stored in argv{0} by default
+
+  5) Fix print_result() to print results correctly and in the same order
+     as the words were specified on the command line.  Explain your solution.
+
+void print_result(WordCountEntry entries[], int entry_count) {
+    printf("Result:\n");
+    while (entry_count > 0) {
+        printf("%s:%d\n", entries -> word, entries -> counter);
+	entry_count++;        
+	entries++;
+        }}
+entry and count need incrementation
